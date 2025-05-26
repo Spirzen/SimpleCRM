@@ -12,19 +12,48 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <!-- Изменено: ссылка на главную страницу теперь ведет на Requests/Index -->
                 <a class="navbar-brand" asp-area="" asp-controller="Requests" asp-action="Index">SimpleCRM</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <!-- Изменено: Home заменено на Обращения -->
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Requests" asp-action="Index">Обращения</a>
                         </li>
-                        <!-- Удалено: ссылка Privacy -->
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <!-- Отображение имени пользователя -->
+                            <li class="nav-item">
+                                <span class="navbar-text text-dark me-3">
+                                    @User.Claims.FirstOrDefault(c => c.Type == "FullName")?.Value
+                                </span>
+                            </li>
+                            <!-- Ссылка на профиль -->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Profile" asp-action="Index">Профиль</a>
+                            </li>
+                            <!-- Кнопка выхода -->
+                            <li class="nav-item">
+                                <form asp-area="Identity" asp-page="/Account/Logout" 
+                                      asp-route-returnUrl="@Url.Action("Index", "Requests", new { area = "" })" method="post">
+                                    <button type="submit" class="btn btn-outline-danger">Выйти</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- Ссылки на вход и регистрацию -->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Вход</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -38,7 +67,6 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            <!-- Удалено: ссылка Privacy -->
             &copy; 2025 - SimpleCRM
         </div>
     </footer>

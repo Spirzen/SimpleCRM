@@ -1,19 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SimpleCRM.Data;
 using SimpleCRM.Models;
 
 namespace SimpleCRM.Controllers
 {
+    /// <summary>
+    /// Контроллер для управления обращениями.
+    /// </summary>
+    [Authorize]
     public class RequestsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Конструктор контроллера RequestsController.
+        /// </summary>
+        /// <param name="context">Контекст базы данных.</param>
         public RequestsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Requests
+        /// <summary>
+        /// Отображает список всех обращений с возможностью фильтрации и сортировки.
+        /// </summary>
+        /// <param name="statusFilter">Фильтр по статусу обращения.</param>
+        /// <param name="sortOrder">Параметр сортировки (по дате или статусу).</param>
+        /// <returns>Представление со списком обращений.</returns>
+        [Authorize(Roles = "Admin")]
         public IActionResult Index(string statusFilter, string sortOrder)
         {
             ViewData["DateSortParam"] = sortOrder == "date_asc" ? "date_desc" : "date_asc";
@@ -23,7 +38,7 @@ namespace SimpleCRM.Controllers
 
             if (!string.IsNullOrEmpty(statusFilter))
             {
-                requests = requests.Where(r => r.Status == statusFilter); // Фильтр по тексту
+                requests = requests.Where(r => r.Status == statusFilter);
             }
 
             switch (sortOrder)
@@ -47,7 +62,11 @@ namespace SimpleCRM.Controllers
             return View(requests.ToList());
         }
 
-        // GET: Requests/Details/5
+        /// <summary>
+        /// Отображает детали выбранного обращения.
+        /// </summary>
+        /// <param name="id">Идентификатор обращения.</param>
+        /// <returns>Представление с деталями обращения или страница ошибки, если обращение не найдено.</returns>
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -64,27 +83,39 @@ namespace SimpleCRM.Controllers
             return View(request);
         }
 
-        // GET: Requests/Create
+        /// <summary>
+        /// Отображает форму для создания нового обращения.
+        /// </summary>
+        /// <returns>Представление формы создания обращения.</returns>
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Requests/Create
+        /// <summary>
+        /// Обрабатывает создание нового обращения.
+        /// </summary>
+        /// <param name="request">Модель данных нового обращения.</param>
+        /// <returns>Перенаправление на список обращений в случае успеха или представление с ошибками.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Title,Description,ResponsibleEmployee")] Request request)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(request); // EF Core автоматически использует значение CreatedAt из модели
+                _context.Add(request);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(request);
         }
 
-        // GET: Requests/Edit/5
+        /// <summary>
+        /// Отображает форму для редактирования существующего обращения.
+        /// </summary>
+        /// <param name="id">Идентификатор обращения.</param>
+        /// <returns>Представление формы редактирования или страница ошибки, если обращение не найдено.</returns>
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -97,10 +128,16 @@ namespace SimpleCRM.Controllers
             {
                 return NotFound();
             }
+
             return View(request);
         }
 
-        // POST: Requests/Edit/5
+        /// <summary>
+        /// Обрабатывает обновление существующего обращения.
+        /// </summary>
+        /// <param name="id">Идентификатор обращения.</param>
+        /// <param name="request">Обновленная модель данных обращения.</param>
+        /// <returns>Перенаправление на список обращений в случае успеха или представление с ошибками.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,Title,Description,Status,ResponsibleEmployee")] Request request)
@@ -116,10 +153,15 @@ namespace SimpleCRM.Controllers
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(request);
         }
 
-        // GET: Requests/Delete/5
+        /// <summary>
+        /// Отображает форму подтверждения удаления обращения.
+        /// </summary>
+        /// <param name="id">Идентификатор обращения.</param>
+        /// <returns>Представление формы подтверждения удаления или страница ошибки, если обращение не найдено.</returns>
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -136,7 +178,11 @@ namespace SimpleCRM.Controllers
             return View(request);
         }
 
-        // POST: Requests/Delete/5
+        /// <summary>
+        /// Обрабатывает удаление обращения.
+        /// </summary>
+        /// <param name="id">Идентификатор обращения.</param>
+        /// <returns>Перенаправление на список обращений.</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -147,6 +193,7 @@ namespace SimpleCRM.Controllers
                 _context.Requests.Remove(request);
                 _context.SaveChanges();
             }
+
             return RedirectToAction(nameof(Index));
         }
     }

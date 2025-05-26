@@ -47,7 +47,7 @@ h2 {
     }
 
 .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(123, 104, 238, 0.1); /* Light purple */
+    background-color: rgba(123, 104, 238, 0.1);
 }
 
 .btn-primary {
