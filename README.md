@@ -24,3 +24,6 @@ C#, ASP.NET, PostgreSQL, Entity Framework Core, Identity Framework, HTML, CSS, J
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 5. Запустите приложение.
+6. По умолчанию данные для авторизации такие:
+Администратор: admin@example.com / Admin@123
+Обычный пользователь: user@example.com / User@123
