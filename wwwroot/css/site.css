@@ -1,0 +1,80 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+h2 {
+    color: MediumSlateBlue;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+}
+
+    .table th,
+    .table td {
+        padding: 0.75rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .table thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #dee2e6;
+        color: MediumSlateBlue;
+    }
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(123, 104, 238, 0.1); /* Light purple */
+}
+
+.btn-primary {
+    background-color: MediumSlateBlue;
+    border-color: MediumSlateBlue;
+}
+
+    .btn-primary:hover {
+        background-color: DarkSlateBlue;
+        border-color: DarkSlateBlue;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+    .btn-danger:hover {
+        background-color: #bb2d3b;
+        border-color: #b02a37;
+    }
+
+.form-control {
+    border-color: MediumSlateBlue;
+}
+
+    .form-control:focus {
+        border-color: DarkSlateBlue;
+        box-shadow: 0 0 0 0.2rem rgba(123, 104, 238, 0.25);
+    }
